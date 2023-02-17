@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Employee payroll Details</title>
+    <link href="/css/payrolldata.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <!-- <script src="jquery-3.6.3.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+
+</head>
+
+<body>
+    <header class="headerContent">
+        <div class="headerimg">
+            <img src="/assests/empimg.PNG" alt="logo" />
+            <div>
+                <span class="headertext1">EMPLOYEE</span><br>
+                <span class="headertext2">PAYROLL</span>
+            </div>
+        </div>
+    </header>
+    <div class="mainContent">
+        <div class="formheading">
+            <div class="empDetails">
+                Employee Details
+            </div>
+            <div class="iconButton">
+                <i class="material-icons">search</i>
+                <a href="../templates/payrollFormData.html">
+                    <div><button class="userButton"><span>+</span> Add user</button></div>
+                </a>
+            </div>
+
+        </div>
+        <div class="tableData">
+            <table id="table" class="tableContent">
+                <tr class="headingRow">
+                    <th class="headImg"></th>
+                    <th class="headName">NAME</th>
+                    <th class="headGender">GENDER</th>
+                    <th class="headDept">DEPARTMENT</th>
+                    <th class="headSal">SALARY</th>
+                    <th class="headDate">START DATE</th>
+                    <th class="headAction">ACTION</th>
+                </tr>
+                <tbody id="tableRow"></tbody>
+                <!-- <tr id="tableRow"></tr> -->
+                <!-- <tr class="tableRow">
+                    <td class="headImg"><img src="/assests/imga.PNG" class="imgdata" /></td>
+                    <td class="headName">ABC CDE</td>
+                    <td class="headGender">Female</td>
+                    <td class="headDept"><span style="background-color: greenyellow;">HR</span><span style="background-color: greenyellow;">Finance</span></td>
+                    <td class="headSal">10000</td>
+                    <td class="headDate">07-02-2023</td>
+                    <td class="headAction"><i class="material-icons">delete</i><i class="material-icons">edit</i></td>
+                    
+                </tr>
+                <tr class="tableRow">
+                    <td class="headImg"><img src="/assests/imgb.PNG" class="imgdata" /></td>
+                    <td class="headName">ABC CDE</td>
+                    <td class="headGender">Male</td>
+                    <td class="headDept"><span style="background-color: greenyellow;">Finance</span></td>
+                    <td class="headSal">10000</td>
+                    <td class="headDate">07-02-2023</td>
+                    <td class="headAction"><i class="material-icons">delete</i><i class="material-icons">edit</i></td>
+                    
+                </tr>
+                <tr class="tableRow">
+                    <td class="headImg"><img src="/assests/imgc.PNG" class="imgdata" /></td>
+                    <td class="headName">ABC CDE</td>
+                    <td class="headGender">Female</td>
+                    <td class="headDept"><span style="background-color: greenyellow;">Sales</span></td>
+                    <td class="headSal">10000</td>
+                    <td class="headDate">07-02-2023</td>
+                    <td class="headAction"><i class="material-icons">delete</i><i class="material-icons">edit</i></td>
+                    
+                </tr>
+
+                <tr class="tableRow">
+                    <td class="headImg"><img src="/assests/imgd.PNG" class="imgdata" /></td>
+                    <td class="headName">Awurhd zxcvbn</td>
+                    <td class="headGender">Male</td>
+                    <td class="headDept"><span style="background-color: greenyellow;">Engineer</span></td>
+                    <td class="headSal">10000</td>
+                    <td class="headDate">07-02-2023</td>
+                    <td class="headAction"><i class="material-icons">delete</i><i class="material-icons">edit</i></td>
+                    
+                </tr> -->
+
+            </table>
+        </div>
+
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            getData();
+        })
+
+        function editEmpData(id) {
+            console.log("calling")
+            var a = id;
+            localStorage.setItem("myValue", a);
+            window.location.href = "../templates/payrollFormData.html";
+            // `<a href="../templates/payrollFormData.html">`
+        }
+
+        function deleteEmp(id) {
+            console.log(id);
+
+            // $.ajax({
+
+            //     type: 'DELETE',
+            //     url: 'http://localhost:3000/employees/'+ id,
+            //     success: function (res) {
+            //         console.log(res)
+
+            //     },
+            //     error: function (err) {
+            //         console.log(err)
+            //     }
+
+            // });
+
+            fetch("http://localhost:3000/employees/" + id, {
+                method: 'DELETE',
+            }).then(
+                (res) => res.json()
+            ).then((response) => {
+                console.log(response);
+                getData();
+            })
+        }
+
+        function getData() {
+            fetch("http://localhost:3000/employees").then(
+                (res) => res.json()
+            ).then((response) => {
+                var tmpData = "";
+                console.log(response);
+                response.forEach((emp) => {
+                    tmpData += "<tr class='tableRow'>"
+                    tmpData += "<td class='headImg'><img src=" + emp.profile + " class='imgdata' </td>";
+                    tmpData += "<td class='headName'>" + emp.name + "</td>";
+                    tmpData += "<td class='headGender'>" + emp.gender + "</td>";
+                    tmpData += "<td class='headDept'><span style='background-color: greenyellow;'>" + emp.department + "</span></td>";
+                    tmpData += "<td class='headSal'>" + emp.salary + "</td>";
+                    tmpData += "<td class='headDate'>" + emp.startdate + "</td>";
+                    //tmpData += "<td class='headAction'><button onclick='deleteEmp(`${emp.id}`)'" + emp.id + "')' style='border:none'><i class='material-icons'>delete</i></button><i onClick='editEmpData('" + emp.id + "')'  class='material-icons'>edit</i></td>";
+                    tmpData += `<td class='headAction'><button onclick='deleteEmp(${emp.id})' style='border:none'><i class='material-icons'>delete</i></button><i onClick='editEmpData(${emp.id})'  class='material-icons'>edit</i></td>`;
+
+
+                    tmpData += "</tr>";
+                    //console.log(emp.id);
+                })
+                document.getElementById("tableRow").innerHTML = tmpData;
+            })
+        }
+    </script>
+</body>
+
+</html>
