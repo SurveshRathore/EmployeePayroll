@@ -1,0 +1,214 @@
+body{
+    height: 100vh;   
+    width: 100vw;
+    background-color: #f2f5fa;
+}
+
+.headerContent
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 15px 0;
+    
+}
+
+.headerimg{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 80%;
+    border: 0px solid green;
+}
+
+.headertext1{
+    font: normal  bold 20px Montserrat;
+    font-family: "Montserrat", sans-serif;
+    color: #bde733;
+    text-transform: capitalize;
+}
+
+.headertext2{
+    font: normal  bold 20px Montserrat;
+    font-family: "Montserrat", sans-serif;
+    color: #42515f;
+    text-transform: capitalize;
+}
+
+.mainContent{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80%;
+    margin-top: 20px;
+    margin-left: 10%;
+    background-color: #ffffff;
+}
+
+.iconButton{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 16%;
+    
+}
+
+.fa-search{
+    background-color: #f8f8f8;
+    border: #f8f8f8;
+    height: auto;
+    width: 4%;
+}
+
+.userButton{
+    background: rgb(142, 175, 52);
+    height: 32px;
+    width: 120px;
+    border: none;
+    border-radius: 1px;
+    color: #f8f8f8;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.formheading{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    
+}
+
+.empDetails{
+    font: normal normal bold 24px Roboto;
+    letter-spacing: 0px;
+    color: #42515f;
+    text-transform: capitalize;
+    opacity: 1;
+    padding-bottom: 30px;
+    text-align: center;
+}
+
+.tableData{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    width: 100%;
+    height: 100%;
+    
+}
+
+.tableContent{
+    width: 100%;
+    height: auto;
+}
+
+.tableContent tr:hover {background-color: #ddd;}
+
+tr {
+    border-bottom: 1px rgb(128, 53, 53);
+  }
+
+.headingRow{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    background-color: rgba(50, 46, 54, 0.795);
+    color: #ffffff;
+    height: 50px;
+}
+.headImg{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 7%;
+}
+.headName{
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    align-items: center;
+    width: 25%;
+}
+.headGender{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 10%;
+}
+.headDept{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 22%;
+    
+}
+.headDept>span{
+    padding-right: 10px;
+}
+.headSal{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 12%;
+}
+.headDate{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 15%;
+}
+.headAction{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 10%;
+    
+}
+.headAction > i{
+    color: #454a50;
+    padding-right: 20px;
+}
+
+.tableRow{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    
+}
+
+
+.dataHeading{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgb(22, 10, 66);
+    color: #f8f8f8;
+    height: 30px;
+    
+}
+
+.formData{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    
+}
+
+.datarow{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 30px;
+}
+
