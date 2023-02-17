@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Employee payroll form</title>
+    <link href="/css/index.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+
+        var empId = localStorage.getItem("myValue");
+        //alert("The Value Received is " + empId);
+
+        $(document).ready(function () {
+
+            if (empId > 0) {
+                fetch("http://localhost:3000/employees/" + empId).then(
+                    (res) => res.json()
+                ).then((response) => {
+                    //console.log(response)
+
+                    //for name 
+                    document.getElementById('txtName').value = response.name;
+
+                    //for profile image 
+                    const radioProfile = document.getElementsByName("profile");
+                    for (let i = 0; i < radioProfile.length; i++) {
+                        if (radioProfile[i].value === response.profile) {
+                            radioProfile[i].checked = true;
+                            break;
+                        }
+                    }
+
+                    //for gender
+
+                    const radioGender = document.getElementsByName("gender");
+                    for (let i = 0; i < radioGender.length; i++) {
+                        if (radioGender[i].value === response.gender) {
+                            radioGender[i].checked = true;
+                            break;
+                        }
+                    }
+
+                    // for checkboxes department
+                    var checkboxValue = response.department;
+                    //console.log(checkboxValue)
+                    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                    //console.log(checkboxes.length);
+                    for (let i = 0; i < checkboxes.length; i++) {
+                        //console.log(checkboxValue.includes(checkboxes[i].value));
+                        if (checkboxValue.includes(checkboxes[i].value)) {
+                            //console.log(checkboxes[i].value);
+                            checkboxes[i].checked = true;
+                        }
+                    }
+                    
+                    //for salary
+
+                    const selectSal = document.getElementById('salary');
+                    const index = Array.from(selectSal.options).findIndex(option => option.value === response.salary)
+                    selectSal.selectedIndex = index;
+
+                    //for date
+
+                    var date = response.startdate;
+                    date = date.split("-");
+                    var day = date[0];
+                    var month = date[1];
+                    var year = date[2];
+                    //console.log(date + " " + day + " " + month + " " + year)
+
+                    const selectDay = document.getElementById('day');
+                    const indexDay = Array.from(selectDay.options).findIndex(option => option.value === day)
+                    selectDay.selectedIndex = indexDay;
+
+                    const selectMonth = document.getElementById('month');
+                    const indexMonth = Array.from(selectMonth.options).findIndex(option => option.value === month)
+                    selectMonth.selectedIndex = indexMonth;
+
+                    const selectYear = document.getElementById('year');
+                    const indexYear = Array.from(selectYear.options).findIndex(option => option.value === year)
+                    selectYear.selectedIndex = indexYear;
+
+                    //for notes
+
+                    document.getElementById('txtNote').value = response.Notes;
+
+                    //remove the user id
+                    //localStorage.removeItem("myValue");
+                })
+            }
+
+
+        });
+
+
+
+        function getOption(tagname) {
+            selectElement = document.querySelector(tagname);
+            output = selectElement.value;
+            return output;
+
+        }
+        function displayRadioValue(tagname) {
+            var ele = document.getElementsByName(tagname);
+            for (i = 0; i < ele.length; i++) {
+                if (ele[i].checked)
+                    return ele[i].value;
+            }
+        }
+
+        //function to decide whether add a new employee or add on existing
+        function submitdata(){
+            if(empId>0) editData()
+            else 
+            addEmployee()
+        }
+
+        //edit the detail of an existing employee
+        function editData(){
+            const name = document.getElementById('txtName');
+            const profileImage = displayRadioValue('profile');
+            const gender = displayRadioValue('gender');
+            const department = displayRadioValue('department');
+            const salary = getOption('#salary');
+            const day = getOption('#day');
+            const month = getOption('#month');
+            const year = getOption('#year');
+            const notes = document.getElementById('txtNote');
+            const date = day + '-' + month + '-' + year;
+
+            const form = {
+                "name": name.value,
+                "profile": profileImage,
+                "gender": gender,
+                "department": department,
+                "salary": salary,
+                "startdate": date,
+                "Notes": notes.value
+            }
+
+            console.log(JSON.stringify(form));
+
+            $.ajax({
+
+                type: 'PUT',
+                url: 'http://localhost:3000/employees/'+empId,
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify(form),
+                processData: false,
+
+                success: function (res) {
+                    console.log(res)
+
+                },
+                error: function (err) {
+                    console.log(err)
+                }
+                
+            });
+
+            //move to display the table
+            window.location.href = "../templates/payrolldetail.html";
+            
+            //remove the user id
+            localStorage.removeItem("myValue");
+        
+        }
+
+        //add a new employee
+        function addEmployee() {
+            const name = document.getElementById('txtName');
+            const profileImage = displayRadioValue('profile');
+            const gender = displayRadioValue('gender');
+            const department = displayRadioValue('department');
+            const salary = getOption('#salary');
+            const day = getOption('#day');
+            const month = getOption('#month');
+            const year = getOption('#year');
+            const notes = document.getElementById('txtNote');
+            const date = day + '-' + month + '-' + year;
+
+            // alert(`${name.value} ${profileImage.value} ${gender}  ${salary} ${notes.value}`);
+            //alert(`${name.value} ${profileImage} ${gender} ${department} ${salary} ${date}`);
+
+            const form = {
+                "name": name.value,
+                "profile": profileImage,
+                "gender": gender,
+                "department": department,
+                "salary": salary,
+                "startdate": date,
+                "Notes": notes.value
+            }
+
+            console.log(JSON.stringify(form));
+
+            $.ajax({
+
+                type: 'POST',
+                url: 'http://localhost:3000/employees/',
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify(form),
+                processData: false,
+
+                success: function (res) {
+                    console.log(res)
+
+                },
+                error: function (err) {
+                    console.log(err)
+                }
+                // dataType: 'json',
+                // data: formToJson($("form")),
+                // contentType: 'application/json;charset=UTF-8',
+                // success: function (res) {
+                //     console.log(res)
+
+                // },
+                // error: function (err) {
+                //     console.log(err)
+                // }
+            });
+
+            //move to display the table
+            window.location.href = "../templates/payrolldetail.html";
+            
+
+        }
+
+
+    </script>
+
+</head>
+
+<body>
+    <header class="headerContent">
+        <div class="headerimg">
+            <img src="/assests/empimg.PNG" alt="logo" />
+            <div>
+                <span class="headertext1">EMPLOYEE</span><br>
+                <span class="headertext2">PAYROLL</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="formContent">
+        <div class="form" action="#">
+            <div class="formheading">Employee Payroll Form</div>
+            <div class="formrow">
+                <label class="textLabel">Name</label>
+                <input id="txtName" class="inputName" type="text" size="60%">
+            </div>
+            <div class="formrow">
+                <label class="textLabel">Profile image</label>
+                <div class="profileRadio">
+                    <label>
+                        <input type="radio" name="profile" value="../assests/imga.PNG">
+                        <img class="profile" src="../assests/imga.PNG" alt="profile1">
+                    </label>
+                    <label>
+                        <input type="radio" name="profile" value="../assests/imgb.PNG">
+                        <img class="profile" src="../assests/imgb.PNG" alt="profile2">
+                    </label>
+                    <label>
+                        <input type="radio" name="profile" value="../assests/imgc.PNG">
+                        <img class="profile" src="../assests/imgc.PNG" alt="profile3">
+                    </label>
+                    <label>
+                        <input type="radio" name="profile" value="../assests/imgd.PNG">
+                        <img class="profile" src="../assests/imgd.PNG" alt="profile4">
+                    </label>
+                </div>
+            </div>
+
+            <div class="formrow">
+                <label class="textLabel">Gender</label>
+                <div>
+                    <input id="gender" type="radio" name="gender" value="male">
+                    <label>Male</label>
+                    <input id="gender" type="radio" name="gender" value="female">
+                    <label>Female</label>
+                </div>
+            </div>
+            <div class="formrow">
+                <label class="textLabel">Department</label>
+                <div>
+                    <input id="hr" type="checkbox" class="department" name="department" value="hr">
+                    <label>HR</label>
+                    <input id="sales" type="checkbox" class="department" name="department" value="sales">
+                    <label>Sales</label>
+                    <input id="finance" type="checkbox" class="department" name="department" value="finance">
+                    <label>Finance</label>
+                    <input id="engineer" type="checkbox" class="department" name="department" value="engineer">
+                    <label>Engineer</label>
+                    <input id="others" type="checkbox" class="department" name="department" value="others">
+                    <label>Others</label>
+                </div>
+            </div>
+            <div class="formrow">
+                <label class="textLabel">Salary</label>
+                <select id="salary">
+                    <option value="0">Select Salary</option>
+                    <option id="sal" value="10000">10000</option>
+                    <option id="sal" value="20000">20000</option>
+                    <option id="sal" value="30000">30000</option>
+
+                </select>
+            </div>
+            <div class="formrow">
+                <label class="textLabel">Start Date</label>
+                <select id="day">
+                    <option value="0">Day</option>
+                    <option value="01">1</option>
+                    <option value="02">2</option>
+                    <option value="03">3</option>
+                    <option value="04">4</option>
+                    <option value="05">5</option>
+                    <option value="06">6</option>
+                    <option value="07">7</option>
+                    <option value="08">8</option>
+                    <option value="09">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18">18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+                    <option value="21">21</option>
+                    <option value="22">22</option>
+                    <option value="23">23</option>
+                    <option value="24">24</option>
+                    <option value="25">25</option>
+                    <option value="26">26</option>
+                    <option value="27">27</option>
+                    <option value="28">28</option>
+                    <option value="29">29</option>
+                    <option value="30">30</option>
+                    <option value="31">31</option>
+                </select>
+                <select id="month">
+                    <option value="Month">Month</option>
+                    <option value="01">January</option>
+                    <option value="02">Febuary</option>
+                    <option value="03">March</option>
+                    <option value="04">April</option>
+                    <option value="05">May</option>
+                    <option value="06">June</option>
+                    <option value="07">July</option>
+                    <option value="08">August</option>
+                    <option value="09">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                </select>
+                <select id="year">
+                    <option value="0">Year</option>
+                    <option value="2023">2023</option>
+                    <option value="2022">2022</option>
+                    <option value="2021">2021</option>
+                    <option value="2020">2020</option>
+                    <option value="2019">2019</option>
+                    <option value="2018">2018</option>
+                    <option value="2017">2017</option>
+                    <option value="2016">2016</option>
+                    <option value="2015">2015</option>
+                    <option value="2014">2014</option>
+                    <option value="2013">2013</option>
+                    <option value="2012">2012</option>
+                </select>
+
+            </div>
+            <div class="formrow">
+                <label class="textLabel">Notes</label>
+                <textarea id="txtNote" class="noteArea"></textarea>
+
+            </div>
+            <div class="formbutton">
+                <button type="cancel" class="button cancelButton">Cancel</button>
+                <div class="submitReset">
+                    <button onclick="submitdata()" id="buttonSubmit" type="submit"
+                        class="button submitButton">Submit</button>
+                    <button type="reset" class="resetButton button">Reset</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
